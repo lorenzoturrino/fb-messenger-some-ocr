@@ -434,7 +434,7 @@ function imageParser(recipientID, sentFile) {
   request.get(imageUrl, function(err, res, body){
     console.log('PONGPONGPONg');
     console.log(res);
-    fs.write('sampleDL.png', body, function() {
+    fs.writeFile('/sampleDL.png', body, function() {
                 console.log('Successfully downloaded file ' + imageUrl);
             });
     sendTextMessage(recipientID, "all done, " + res.statusCode);
