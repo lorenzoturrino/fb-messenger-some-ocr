@@ -428,16 +428,13 @@ function filerBouncer(recipientId, sentFile) {
 
 function imageParser(recipientID, sentFile) {
   var imageUrl = sentFile.payload.url;
-  console.log('PINGPINGPING');
-  console.log(imageUrl);
-  console.log('PINGPINGPING');
   request.get(imageUrl, function(err, res, body){
-    console.log('PONGPONGPONg');
-    console.log(res);
-    fs.writeFile('/sampleDL.png', body, function() {
-                console.log('Successfully downloaded file ' + imageUrl);
-            });
-    sendTextMessage(recipientID, "all done, " + res.statusCode);
+    tesseract.recognize(body)
+      .progress(function  (p) { console.log('progress', p)    })
+      .then(function (result) {
+       console.log('result!', result);
+       sendTextMessage(recipientID, "code" + res.statusCode + ", the parsed text is :\n" + result);
+      });
   });
 }
 
