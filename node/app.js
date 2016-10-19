@@ -17,6 +17,7 @@ const
   express = require('express'),
   https = require('https'),
   request = require('request'),
+  fs = require('fs'),
   tesseract = require('tesseract.js');
 
 var app = express();
@@ -426,9 +427,15 @@ function filerBouncer(recipientId, sentFile) {
 }
 
 function imageParser(recipientID, sentFile) {
-  var imageUrl = sentFile.payload.url
-  sendTextMessage(recipientID, "all done, " + imageUrl);
+  var imageUrl = sentFile.payload.url;
+  request.get(imageUrl, function(res){
+    fs.write('sampleDL.png', response.body, function() {
+                console.log('Successfully downloaded file ' + imageUrl);
+            });
+    sendTextMessage(recipientID, "all done, " + res.statusCode);
+  });
 }
+
 /*
  * Send an image using the Send API.
  *
