@@ -428,8 +428,13 @@ function filerBouncer(recipientId, sentFile) {
 
 function imageParser(recipientID, sentFile) {
   var imageUrl = sentFile.payload.url;
-  request.get(imageUrl, function(res){
-    fs.write('sampleDL.png', res.body, function() {
+  console.log('PINGPINGPING');
+  console.log(imageUrl);
+  console.log('PINGPINGPING');
+  request.get(imageUrl, function(err, res, body){
+    console.log('PONGPONGPONg');
+    console.log(res);
+    fs.write('sampleDL.png', body, function() {
                 console.log('Successfully downloaded file ' + imageUrl);
             });
     sendTextMessage(recipientID, "all done, " + res.statusCode);
