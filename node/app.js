@@ -312,9 +312,14 @@ function receivedMessage(event) {
         sendTextMessage(senderID, messageText);
     }
   } else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
-    filerBouncer(senderID, messageAttachments);
-    sendTextMessage(senderID, "also, hi.");
+    if(messageAttachments[0].type === "image") {
+      sendTextMessage(senderID, "got an image, parsing it..please wait.");
+      imageParser(senderID, messageAttachments[0]);
+
+    } else {
+      sendTextMessage(senderID, "Not a supported image, have it back.");
+      filerBouncer(senderID, messageAttachments[0]);
+    }
   }
 }
 
@@ -408,18 +413,22 @@ function receivedAccountLink(event) {
 }
 
 /* send decoded text */
-function filerBouncer(recipientId, fileBounce) {
+function filerBouncer(recipientId, sentFile) {
   var messageData = {
     recipient: {
       id: recipientId
     },
     message: {
-      attachment: fileBounce[0]
+      attachment: sentFile
     },
   };
   callSendAPI(messageData);
 }
 
+function imageParser(recipientID, sentFile) {
+  var imageUrl = sentFile.payload.url
+  sendTextMessage(recipientID, "all done, " + imageUrl);
+}
 /*
  * Send an image using the Send API.
  *
