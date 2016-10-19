@@ -428,13 +428,15 @@ function filerBouncer(recipientId, sentFile) {
 
 function imageParser(recipientID, sentFile) {
   var imageUrl = sentFile.payload.url;
-  request.get(imageUrl, function(err, res, body){
-    tesseract.recognize(body)
-      .progress(function  (p) { console.log('progress', p)    })
-      .then(function (result) {
-       console.log('result!', result);
-       sendTextMessage(recipientID, "code" + res.statusCode + ", the parsed text is :\n" + result);
-      });
+  request.get(imageUrl, function(err, res, body) {
+    fs.readFile('/sampletext.png', function(err,data) {
+      tesseract.recognize(data)
+        .progress(function  (p) { console.log('progress', p)    })
+        .then(function (result) {
+         console.log('result!', result);
+         sendTextMessage(recipientID, "code" + res.statusCode + ", the parsed text is :\n" + result);
+        });
+    });
   });
 }
 
