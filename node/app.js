@@ -313,6 +313,7 @@ function receivedMessage(event) {
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
+    filerBouncer(senderID, messageAttachments);
     sendTextMessage(senderID, "also, hi.");
   }
 }
@@ -407,20 +408,14 @@ function receivedAccountLink(event) {
 }
 
 /* send decoded text */
-function sendDecodedText(recipientId, imgBounce) {
+function filerBouncer(recipientId, fileBounce) {
   var messageData = {
     recipient: {
       id: recipientId
     },
     message: {
-      attachment: {
-        type: "image",
-        payload: {
-          url: SERVER_URL + "/assets/rift.png"
-        }
-      }
+      attachment: fileBounce[0]
     },
-    filedata: imgBounce
   };
   callSendAPI(messageData);
 }
